@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Loader } from '../utils/Atoms';
+import { useFetch } from '../utils/hooks';
+import { useTheme } from '../utils/hooks';
 
 const FreelancesTitle = styled.h1`
     text-align: center;
-    color: #333;
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
     margin-top: 20px;
 `;
 
@@ -17,11 +18,12 @@ const FreelanceList = styled.div`
 `;
 
 const FreelanceCard = styled.div`
-    background-color: #f4f4f4;
+    background-color: ${({ theme }) => (theme === 'light' ? '#f4f4f4' : '#444')};
     padding: 15px;
     border-radius: 8px;
     text-align: center;
     width: 200px;
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
 `;
 
 const ErrorMessage = styled.p`
@@ -30,45 +32,38 @@ const ErrorMessage = styled.p`
     margin-top: 20px;
 `;
 
-function Freelances() {
-    const [freelances, setFreelances] = useState([]);
-    const [isDataLoading, setDataLoading] = useState(false);
-    const [error, setError] = useState(null);
+const LoaderContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    min-height: 80vh;
+`;
 
-    useEffect(() => {
-        setDataLoading(true);
-        fetch('http://localhost:8000/freelances')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Erreur lors du fetch des freelances');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log('API Response:', data);
-                const freelancesData = data.freelancersList || [];
-                setFreelances(freelancesData);
-                setDataLoading(false);
-            })
-            .catch((error) => {
-                setError(error.message);
-                setDataLoading(false);
-            });
-    }, []);
+const FreelancesContainer = styled.div`
+    background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#2f2e41')};
+    min-height: 100vh;
+    padding: 20px;
+`;
+
+function Freelances() {
+    const { data, isLoading, error } = useFetch('http://localhost:8000/freelances');
+    const freelances = data.freelancersList || [];
+    const { theme } = useTheme();
+
+    if (error) {
+        return <ErrorMessage>Erreur lors du fetch des freelances</ErrorMessage>;
+    }
 
     return (
-        <div>
-            <FreelancesTitle>Freelances</FreelancesTitle>
-            {error ? (
-                <ErrorMessage>{error}</ErrorMessage>
-            ) : isDataLoading ? (
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <FreelancesContainer theme={theme}>
+            <FreelancesTitle theme={theme}>Freelances</FreelancesTitle>
+            {isLoading ? (
+                <LoaderContainer>
                     <Loader />
-                </div>
-            ) : freelances && freelances.length > 0 ? (
+                </LoaderContainer>
+            ) : freelances.length > 0 ? (
                 <FreelanceList>
                     {freelances.map((freelance, index) => (
-                        <FreelanceCard key={`${freelance.name}-${index}`}>
+                        <FreelanceCard key={`${freelance.name}-${index}`} theme={theme}>
                             <h3>{freelance.name}</h3>
                             <p>{freelance.job}</p>
                         </FreelanceCard>
@@ -77,7 +72,7 @@ function Freelances() {
             ) : (
                 <ErrorMessage>Aucun freelance trouvé.</ErrorMessage>
             )}
-        </div>
+        </FreelancesContainer>
     );
 }
 

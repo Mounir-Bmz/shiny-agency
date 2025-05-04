@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useTheme } from '../utils/hooks';
 
 const HeaderContainer = styled.header`
-    background-color: #f4f4f4;
+    background-color: ${({ theme }) => (theme === 'light' ? '#f4f4f4' : '#333')};
     padding: 20px;
     text-align: center;
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
 `;
 
 const Nav = styled.nav`
@@ -14,23 +16,24 @@ const Nav = styled.nav`
 
 const StyledLink = styled(Link)`
     margin: 0 10px;
-    color: #333;
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#66b0ff')};
     text-decoration: none;
     &:hover {
-        color: #007bff;
+        color: ${({ theme }) => (theme === 'light' ? '#007bff' : '#fff')};
     }
 `;
 
 function Header({ title }) {
+    const { theme } = useTheme();
     return (
-        <HeaderContainer>
+        <HeaderContainer theme={theme}>
             <h1>{title}</h1>
             <Nav>
-                <StyledLink to="/">Home</StyledLink>
+                <StyledLink theme={theme} to="/">Home</StyledLink>
                 <span>|</span>
-                <StyledLink to="/freelances">Freelances</StyledLink>
+                <StyledLink theme={theme} to="/freelances">Freelances</StyledLink>
                 <span>|</span>
-                <StyledLink to="/survey/1">Survey</StyledLink>
+                <StyledLink theme={theme} to="/survey/1">Survey</StyledLink>
             </Nav>
         </HeaderContainer>
     );

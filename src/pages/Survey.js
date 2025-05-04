@@ -3,14 +3,18 @@ import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Loader } from '../utils/Atoms';
 import { SurveyContext } from '../context';
+import { useTheme } from '../utils/hooks';
 
 const SurveyContainer = styled.div`
     padding: 20px;
     text-align: center;
+    background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#2f2e41')};
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
+    min-height: 100vh;
 `;
 
 const Title = styled.h1`
-    color: #333;
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
 `;
 
 const LoaderContainer = styled.div`
@@ -23,7 +27,7 @@ const LinkWrapper = styled.div`
     margin-top: 20px;
     a {
         margin: 0 10px;
-        color: #007bff;
+        color: ${({ theme }) => (theme === 'light' ? '#007bff' : '#66b0ff')};
         text-decoration: none;
     }
 `;
@@ -52,8 +56,8 @@ function Survey() {
     const [isDataLoading, setDataLoading] = useState(false);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const { saveAnswers } = useContext(SurveyContext);
+    const { theme } = useTheme();
 
-    // Fetch des questions
     useEffect(() => {
         setDataLoading(true);
         fetch(`http://localhost:8000/survey`)
@@ -65,9 +69,8 @@ function Survey() {
             .catch((error) => console.log(error));
     }, []);
 
-    // Réinitialise selectedAnswer quand questionNumber change
     useEffect(() => {
-        setSelectedAnswer(null); // Remet à null à chaque changement de question
+        setSelectedAnswer(null);
     }, [questionNumber]);
 
     const handleAnswer = (answer) => {
@@ -76,8 +79,8 @@ function Survey() {
     };
 
     return (
-        <SurveyContainer>
-            <Title>Questionnaire</Title>
+        <SurveyContainer theme={theme}>
+            <Title theme={theme}>Questionnaire</Title>
             {isDataLoading ? (
                 <LoaderContainer>
                     <Loader />
@@ -104,7 +107,7 @@ function Survey() {
                     </div>
                 </>
             )}
-            <LinkWrapper>
+            <LinkWrapper theme={theme}>
                 <Link to={`/survey/${prevQuestionNumber}`}>Précédent</Link>
                 {surveyData[nextQuestionNumber] ? (
                     <Link to={`/survey/${nextQuestionNumber}`}>Suivant</Link>
