@@ -1,18 +1,38 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const HeaderContainer = styled.header`
+    background-color: #f4f4f4;
+    padding: 20px;
+    text-align: center;
+`;
+
+const Nav = styled.nav`
+    margin-top: 10px;
+`;
+
+const StyledLink = styled(Link)`
+    margin: 0 10px;
+    color: #333;
+    text-decoration: none;
+    &:hover {
+        color: #007bff;
+    }
+`;
 
 function Header({ title }) {
     return (
-        <header>
+        <HeaderContainer>
             <h1>{title}</h1>
-            <nav>
-                <Link to="/">Home</Link>
-                <span> | </span>
-                <Link to="/freelances">Freelances</Link>
-                <span> | </span>
-                <Link to="/survey/1">Survey</Link>
-            </nav>
-        </header>
+            <Nav>
+                <StyledLink to="/">Home</StyledLink>
+                <span>|</span>
+                <StyledLink to="/freelances">Freelances</StyledLink>
+                <span>|</span>
+                <StyledLink to="/survey/1">Survey</StyledLink>
+            </Nav>
+        </HeaderContainer>
     );
 }
 
