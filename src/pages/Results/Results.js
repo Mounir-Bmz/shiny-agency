@@ -1,16 +1,20 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
-import { SurveyContext } from '../context';
-import { useFetch } from '../utils/hooks';
-import { Loader } from '../utils/Atoms';
+import { SurveyContext } from '../../context';
+import { useFetch } from '../../utils/hooks';
+import { useTheme } from '../../utils/hooks';
+import { Loader } from '../../utils/Atoms';
 
 const ResultsContainer = styled.div`
     padding: 20px;
     text-align: center;
+    background-color: ${({ theme }) => (theme === 'light' ? '#fff' : '#2f2e41')};
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
+    min-height: 100vh;
 `;
 
 const Title = styled.h1`
-    color: #333;
+    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
 `;
 
 const ErrorMessage = styled.p`
@@ -25,13 +29,18 @@ const LoaderContainer = styled.div`
     min-height: 80vh;
 `;
 
-function Results() {
-    const { answers } = useContext(SurveyContext);
-
-    // Construire l'URL avec les réponses
-    const queryString = Object.keys(answers)
+// Fonction exportée pour les tests
+export function formatQueryParams(answers) {
+    return Object.keys(answers)
         .map((key) => `a${key}=${answers[key]}`)
         .join('&');
+}
+
+function Results() {
+    const { answers } = useContext(SurveyContext);
+    const { theme } = useTheme();
+
+    const queryString = formatQueryParams(answers);
     const url = `http://localhost:8000/results?${queryString}`;
 
     const { data, isLoading, error } = useFetch(url);
@@ -45,8 +54,8 @@ function Results() {
     }
 
     return (
-        <ResultsContainer>
-            <Title>Résultats</Title>
+        <ResultsContainer theme={theme}>
+            <Title theme={theme}>Résultats</Title>
             {isLoading ? (
                 <LoaderContainer>
                     <Loader />
