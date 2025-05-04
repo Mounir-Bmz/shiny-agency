@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({ title }) {
     return (
         <header>
-            <h1>Shiny</h1>
+            <h1>{title}</h1>
             <nav>
                 <Link to="/">Home</Link>
                 <span> | </span>
@@ -14,5 +15,13 @@ function Header() {
         </header>
     );
 }
+
+Header.propTypes = {
+    title: PropTypes.string.isRequired,
+};
+
+Header.defaultProps = {
+    title: 'Shiny',
+};
 
 export default Header;

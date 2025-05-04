@@ -12,16 +12,16 @@ import Footer from './components/Footer';
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/freelances" element={<Freelances />} />
-        <Route path="/survey/:questionNumber" element={<Survey />} />
-        <Route path="*" element={<Error />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
-  </React.StrictMode>
+    <React.StrictMode>
+        <BrowserRouter>
+            <Header title="Shiny Agency" />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/freelances" element={<Freelances />} />
+                <Route path="/survey/:questionNumber" element={<Survey />} />
+                <Route path="*" element={<Error />} />
+            </Routes>
+            <Footer />
+        </BrowserRouter>
+    </React.StrictMode>
 );
