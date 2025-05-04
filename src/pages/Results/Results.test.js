@@ -1,4 +1,4 @@
-import { formatQueryParams } from './Results';
+import { formatQueryParams } from './index';
 
 describe('La fonction formatQueryParams', () => {
     it('should format answers into a query string with multiple answers', () => {

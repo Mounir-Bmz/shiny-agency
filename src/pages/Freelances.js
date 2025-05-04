@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Loader } from '../utils/Atoms';
 import { useFetch } from '../utils/hooks';
 import { useTheme } from '../utils/hooks';
+import Card from '../components/Card';
 
 const FreelancesTitle = styled.h1`
     text-align: center;
@@ -15,15 +16,6 @@ const FreelanceList = styled.div`
     justify-content: center;
     gap: 20px;
     margin: 20px 0;
-`;
-
-const FreelanceCard = styled.div`
-    background-color: ${({ theme }) => (theme === 'light' ? '#f4f4f4' : '#444')};
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    width: 200px;
-    color: ${({ theme }) => (theme === 'light' ? '#333' : '#fff')};
 `;
 
 const ErrorMessage = styled.p`
@@ -63,10 +55,11 @@ function Freelances() {
             ) : freelances.length > 0 ? (
                 <FreelanceList>
                     {freelances.map((freelance, index) => (
-                        <FreelanceCard key={`${freelance.name}-${index}`} theme={theme}>
-                            <h3>{freelance.name}</h3>
-                            <p>{freelance.job}</p>
-                        </FreelanceCard>
+                        <Card
+                            key={`${freelance.name}-${index}`}
+                            title={freelance.name}
+                            picture={freelance.picture}
+                        />
                     ))}
                 </FreelanceList>
             ) : (
